@@ -1,11 +1,13 @@
 /* eslint-disable no-unused-expressions */
-const { expect } = require('chai');
+import { expect } from "chai";
 
-const axios = require('axios').default;
-const memory = require('feathers-memory');
-const SwaggerParser = require('swagger-parser');
-const swagger = require('../lib');
-const { feathers, startFeathersApp, koaApp, expressApp, isFeathers4 } = require('./helper');
+
+import axios from "axios";
+import memory from "feathers-memory";
+import SwaggerParser from "swagger-parser";
+import swagger from "../lib";
+import { expressApp, feathers, isFeathers4, koaApp, startFeathersApp } from "./helper";
+
 
 describe('feathers-swagger', () => {
   Object.entries({

@@ -102,8 +102,9 @@ const swagger = require('feathers-swagger');
 
 const app = express(feathers())
   // ...
-  .configure(swagger.customMethodsHandler)
-  .configure(express.rest()) // or rest() of koa
+await customMethodsHandler(app)
+  
+  app.configure(express.rest()) // or rest() of koa
   .configure(swagger({
     specs: {
       info: {

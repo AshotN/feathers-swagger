@@ -243,8 +243,8 @@ declare namespace feathersSwagger {
   function customMethod(verb: Verb, path: string): (target: any, memberName: string) => void;
 
   function customMethodsHandler(
-    app: Application
-  ): void;
+    app: any
+  ): Promise<void>;
 
   // swagger ui dist
   interface FnSwaggerUiGetInitializerScript {
