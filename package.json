@@ -1,7 +1,7 @@
 {
   "name": "feathers-swagger",
   "description": "Add documentation to your Feathers services and feed them to Swagger UI.",
-  "version": "3.1.2",
+  "version": "3.1.3",
   "homepage": "https://feathersjs-ecosystem.github.io/feathers-swagger",
   "main": "lib/index.js",
   "type": "module",
@@ -70,6 +70,7 @@
     "@feathersjs/express": "^5.0.25",
     "@feathersjs/feathers": "^5.0.25",
     "@feathersjs/koa": "^5.0.25",
+    "@feathersjs/transport-commons": "^5.0.25",
     "@feathersjs/schema": "^5.0.25",
     "@feathersjs/typebox": "^5.0.25",
     "@koa/router": "^12.0.1",
