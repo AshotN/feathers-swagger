@@ -1,7 +1,7 @@
 {
   "name": "feathers-swagger",
   "description": "Add documentation to your Feathers services and feed them to Swagger UI.",
-  "version": "3.1.1",
+  "version": "3.1.2",
   "homepage": "https://feathersjs-ecosystem.github.io/feathers-swagger",
   "main": "lib/index.js",
   "type": "module",
@@ -75,7 +75,7 @@
     "@koa/router": "^12.0.1",
     "@mairu/swagger-ui-apikey-auth-form": "^1.2.1",
     "@types/serve-static": "^1.13.10",
-    "axios": "^1.6.2",
+    "axios": "1.7.7",
     "cors": "^2.8.5",
     "feathers-memory": "^4.1.0",
     "koa-mount": "^4.0.0",

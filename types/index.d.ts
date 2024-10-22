@@ -6,18 +6,18 @@ import { TAnySchema } from '@feathersjs/typebox';
 import { ExtendableContext } from 'koa';
 import { Request } from 'express';
 
-export = feathersSwagger;
+export default feathersSwagger;
 
 interface UnknownObject {
   [propName: string]: any;
 }
 
 interface FnGetOperationArgs {
-  (options: feathersSwagger.GetOperationArgsOptions): {
-    tag?: string,
-    tags?: string[],
-    model?: string,
-    modelName?: string,
+  (options: GetOperationArgsOptions): {
+    tag?: string;
+    tags?: string[];
+    model?: string;
+    modelName?: string;
   } & UnknownObject;
 }
 
@@ -26,7 +26,7 @@ interface SchemaMultiRef {
   type: 'oneOf' | 'allOf' | 'anyOf';
   discriminator?: {
     propertyName: string;
-  }
+  };
 }
 
 type SchemaRef = string | SchemaMultiRef;
@@ -55,30 +55,30 @@ interface OperationRefs {
 }
 
 interface FnGetOperationsRefs {
-  (model: string, service: feathersSwagger.SwaggerService<any>): OperationRefs;
+  (model: string, service: SwaggerService<any>): OperationRefs;
 }
 
 interface FnSchemasGenerator {
   (
-    service: feathersSwagger.SwaggerService<any>,
+    service: SwaggerService<any>,
     model: string,
     modelName: string,
-    schemas: UnknownObject,
+    schemas: UnknownObject
   ): UnknownObject;
 }
 
 type FnOperationSpecsGeneratorOptions = {
-  tag: string,
-  tags: string[],
-  model: string,
-  modelName: string,
-  idName: string | string[],
-  idType: string | string[],
-  security: any[],
-  securities: Securities,
-  refs: OperationRefs,
-  service: feathersSwagger.SwaggerService<any>,
-  config: feathersSwagger.SwaggerInitOptions,
+  tag: string;
+  tags: string[];
+  model: string;
+  modelName: string;
+  idName: string | string[];
+  idType: string | string[];
+  security: any[];
+  securities: Securities;
+  refs: OperationRefs;
+  service: SwaggerService<any>;
+  config: SwaggerInitOptions;
 } & UnknownObject;
 
 interface FnOperationSpecsGenerator {
@@ -86,11 +86,23 @@ interface FnOperationSpecsGenerator {
 }
 
 interface FnCustomOperationSpecsGenerator {
-  (options: FnOperationSpecsGeneratorOptions, customMethodOptions: {
-    method: string,
-    httpMethod: 'get' | 'post' | 'put' | 'patch' | 'delete' | 'head' | 'options' | 'connect' | 'trace',
-    withId: boolean,
-  }): OperationConfig;
+  (
+    options: FnOperationSpecsGeneratorOptions,
+    customMethodOptions: {
+      method: string;
+      httpMethod:
+        | 'get'
+        | 'post'
+        | 'put'
+        | 'patch'
+        | 'delete'
+        | 'head'
+        | 'options'
+        | 'connect'
+        | 'trace';
+      withId: boolean;
+    }
+  ): OperationConfig;
 }
 
 interface ExternalDocs {
@@ -98,11 +110,22 @@ interface ExternalDocs {
   url: string;
 }
 
-type Securities = Array<'find' | 'get' | 'create' | 'update' | 'patch' | 'remove' | 'updateMulti' | 'patchMulti'
-  | 'removeMulti' | 'all' | string>;
+type Securities = Array<
+  | 'find'
+  | 'get'
+  | 'create'
+  | 'update'
+  | 'patch'
+  | 'remove'
+  | 'updateMulti'
+  | 'patchMulti'
+  | 'removeMulti'
+  | 'all'
+  | string
+>;
 type MultiOperations = Array<'update' | 'patch' | 'remove' | 'create' | 'all'>;
 
-declare function feathersSwagger(config: feathersSwagger.SwaggerInitOptions): () => void;
+declare function feathersSwagger(config: SwaggerInitOptions): () => void;
 
 type SpecsObject = {
   info: {
@@ -118,93 +141,42 @@ type OperationConfig = UnknownObject | false;
 
 type Verb = 'POST' | 'GET' | 'PATCH' | 'PUT' | 'DELETE';
 
-declare namespace feathersSwagger {
-  interface SwaggerInitOptions {
-    specs: SpecsObject;
-    openApiVersion?: OpenApiVersion;
-    docsPath?: string;
-    docsJsonPath?: string;
-    ui?: FnUiInit;
-    idType?: 'string' | 'integer';
-    prefix?: string | RegExp;
-    versionPrefix?: RegExp;
-    include?: {
-      tags?: string[];
-      paths?: Array<string | RegExp>;
-      filter?: (service: Service<any>, path: string) => boolean;
-    };
-    ignore?: {
-      tags?: string[];
-      paths?: Array<string | RegExp>;
-      filter?: (service: Service<any>, path: string) => boolean;
-    };
-    appProperty?: string;
-    defaults?: {
-      getOperationArgs?: FnGetOperationArgs;
-      getOperationsRefs?: FnGetOperationsRefs;
-      schemasGenerator?: FnSchemasGenerator;
-      operationGenerators?: {
-        find?: FnOperationSpecsGenerator;
-        get?: FnOperationSpecsGenerator;
-        create?: FnOperationSpecsGenerator;
-        update?: FnOperationSpecsGenerator;
-        patch?: FnOperationSpecsGenerator;
-        remove?: FnOperationSpecsGenerator;
-        updateMulti?: FnOperationSpecsGenerator;
-        patchMulti?: FnOperationSpecsGenerator;
-        removeMulti?: FnOperationSpecsGenerator;
-        custom?: FnCustomOperationSpecsGenerator;
-      }
-      operations?: {
-        find?: OperationConfig;
-        get?: OperationConfig;
-        create?: OperationConfig;
-        update?: OperationConfig;
-        patch?: OperationConfig;
-        remove?: OperationConfig;
-        updateMulti?: OperationConfig;
-        patchMulti?: OperationConfig;
-        removeMulti?: OperationConfig;
-        all?: UnknownObject;
-        [customMethod: string]: OperationConfig | undefined;
-      }
-      multi?: MultiOperations;
-      schemaNames?: {
-        list: (model: string) => string;
-        pagination: (model: string) => string;
-      };
-    };
-  }
-
-  interface ServiceSwaggerOptions {
-    description?: string;
-    definition?: UnknownObject;
-    definitions?: UnknownObject;
-    schema?: UnknownObject;
-    schemas?: UnknownObject;
-    tag?: string;
-    externalDocs?: ExternalDocs;
+interface SwaggerInitOptions {
+  specs: SpecsObject;
+  openApiVersion?: OpenApiVersion;
+  docsPath?: string;
+  docsJsonPath?: string;
+  ui?: FnUiInit;
+  idType?: 'string' | 'integer';
+  prefix?: string | RegExp;
+  versionPrefix?: RegExp;
+  include?: {
     tags?: string[];
-    model?: string;
-    modelName?: string;
-    idType?: string | string[];
-    idNames?: {
-      get?: string | string[];
-      update?: string | string[];
-      patch?: string | string[];
-      remove?: string | string[];
+    paths?: Array<string | RegExp>;
+    filter?: (service: Service<any>, path: string) => boolean;
+  };
+  ignore?: {
+    tags?: string[];
+    paths?: Array<string | RegExp>;
+    filter?: (service: Service<any>, path: string) => boolean;
+  };
+  appProperty?: string;
+  defaults?: {
+    getOperationArgs?: FnGetOperationArgs;
+    getOperationsRefs?: FnGetOperationsRefs;
+    schemasGenerator?: FnSchemasGenerator;
+    operationGenerators?: {
+      find?: FnOperationSpecsGenerator;
+      get?: FnOperationSpecsGenerator;
+      create?: FnOperationSpecsGenerator;
+      update?: FnOperationSpecsGenerator;
+      patch?: FnOperationSpecsGenerator;
+      remove?: FnOperationSpecsGenerator;
+      updateMulti?: FnOperationSpecsGenerator;
+      patchMulti?: FnOperationSpecsGenerator;
+      removeMulti?: FnOperationSpecsGenerator;
+      custom?: FnCustomOperationSpecsGenerator;
     };
-    securities?: Securities;
-    refs?: OperationRefs;
-    schemaNames?: {
-      list: (model: string) => string;
-      pagination: (model: string) => string;
-    };
-    pathParams?: {
-      [paramName: string]: UnknownObject;
-    };
-    overwriteTagSpec?: boolean;
-    multi?: MultiOperations;
     operations?: {
       find?: OperationConfig;
       get?: OperationConfig;
@@ -216,100 +188,155 @@ declare namespace feathersSwagger {
       patchMulti?: OperationConfig;
       removeMulti?: OperationConfig;
       all?: UnknownObject;
-      [customOperation: string]: OperationConfig | undefined;
+      [customMethod: string]: OperationConfig | undefined;
     };
-  }
+    multi?: MultiOperations;
+    schemaNames?: {
+      list: (model: string) => string;
+      pagination: (model: string) => string;
+    };
+  };
+}
 
-  interface FnUiInit {
-    (app: Application, config: { specs: SpecsObject, docsJsonPath: string, openApiVersion: OpenApiVersion }): void;
-  }
+export interface ServiceSwaggerOptions {
+  description?: string;
+  definition?: UnknownObject;
+  definitions?: UnknownObject;
+  schema?: UnknownObject;
+  schemas?: UnknownObject;
+  tag?: string;
+  externalDocs?: ExternalDocs;
+  tags?: string[];
+  model?: string;
+  modelName?: string;
+  idType?: string | string[];
+  idNames?: {
+    get?: string | string[];
+    update?: string | string[];
+    patch?: string | string[];
+    remove?: string | string[];
+  };
+  securities?: Securities;
+  refs?: OperationRefs;
+  schemaNames?: {
+    list: (model: string) => string;
+    pagination: (model: string) => string;
+  };
+  pathParams?: {
+    [paramName: string]: UnknownObject;
+  };
+  overwriteTagSpec?: boolean;
+  multi?: MultiOperations;
+  operations?: {
+    find?: OperationConfig;
+    get?: OperationConfig;
+    create?: OperationConfig;
+    update?: OperationConfig;
+    patch?: OperationConfig;
+    remove?: OperationConfig;
+    updateMulti?: OperationConfig;
+    patchMulti?: OperationConfig;
+    removeMulti?: OperationConfig;
+    all?: UnknownObject;
+    [customOperation: string]: OperationConfig | undefined;
+  };
+}
 
-  interface ServiceSwaggerAddon {
-    docs: ServiceSwaggerOptions;
-  }
+interface FnUiInit {
+  (
+    app: Application,
+    config: { specs: SpecsObject; docsJsonPath: string; openApiVersion: OpenApiVersion }
+  ): void;
+}
 
-  type SwaggerService<T> = Service<T> & ServiceSwaggerAddon & UnknownObject;
+interface ServiceSwaggerAddon {
+  docs: ServiceSwaggerOptions;
+}
 
-  interface GetOperationArgsOptions {
-    service: SwaggerService<any>;
-    path: string;
-    config: SwaggerInitOptions;
-    apiPath: string;
-    version: string;
-  }
+type SwaggerService<T> = Service<T> & ServiceSwaggerAddon & UnknownObject;
 
-  // custom methods
-  // only define decorator return type for typescript
-  function customMethod(verb: Verb, path: string): (target: any, memberName: string) => void;
+interface GetOperationArgsOptions {
+  service: SwaggerService<any>;
+  path: string;
+  config: SwaggerInitOptions;
+  apiPath: string;
+  version: string;
+}
 
-  function customMethodsHandler(
-    app: any
-  ): Promise<void>;
+// custom methods
+// only define decorator return type for typescript
+export function customMethod(verb: Verb, path: string): (target: any, memberName: string) => void;
 
-  // swagger ui dist
-  interface FnSwaggerUiGetInitializerScript {
-    (options: {
-      docsPath: string;
-      docsJsonPath: string;
-      specs: SpecsObject;
-      ctx?: ExtendableContext;
-      req?: Request;
-      app: Application;
-    }): string;
-  }
+export function customMethodsHandler(app: any): Promise<void>;
 
-  function swaggerUI(
-    options: {
-      docsPath?: string;
-      indexFile?: string;
-      getSwaggerInitializerScript?: FnSwaggerUiGetInitializerScript;
-    }
-  ): FnUiInit;
+// swagger ui dist
+interface FnSwaggerUiGetInitializerScript {
+  (options: {
+    docsPath: string;
+    docsJsonPath: string;
+    specs: SpecsObject;
+    ctx?: ExtendableContext;
+    req?: Request;
+    app: Application;
+  }): string;
+}
 
-  // Utils
-  function operation(
-    name: string,
-    service: SwaggerService<any>,
-    defaults: UnknownObject,
-    specDefaults?: UnknownObject
-  ): UnknownObject;
+export function swaggerUI(options: {
+  docsPath?: string;
+  indexFile?: string;
+  getSwaggerInitializerScript?: FnSwaggerUiGetInitializerScript;
+}): FnUiInit;
 
-  function tag(name: string, options?: {
+// Utils
+declare function operation(
+  name: string,
+  service: SwaggerService<any>,
+  defaults: UnknownObject,
+  specDefaults?: UnknownObject
+): UnknownObject;
+
+declare function tag(
+  name: string,
+  options?: {
     description?: string;
     externalDocs?: ExternalDocs;
-  }): void;
+  }
+): void;
 
-  function security(method: string, securities: Securities, security: UnknownObject[]): UnknownObject[];
+declare function security(
+  method: string,
+  securities: Securities,
+  security: UnknownObject[]
+): UnknownObject[];
 
-  function idPathParameters(idName: string | string[], idSeparator: string): string;
+declare function idPathParameters(idName: string | string[], idSeparator: string): string;
 
-  type Schema = JSONSchemaDefinition | TAnySchema;
-  function createSwaggerServiceOptions(options: {
-    schemas: {
-      findResponse?: Schema;
-      getResponse?: Schema;
-      createRequest?: Schema;
-      createResponse?: Schema;
-      createMultiRequest?: Schema;
-      createMultiResponse?: Schema;
-      updateRequest?: Schema;
-      updateResponse?: Schema;
-      updateMultiRequest?: Schema;
-      updateMultiResponse?: Schema;
-      patchRequest?: Schema;
-      patchResponse?: Schema;
-      patchMultiRequest?: Schema;
-      patchMultiResponse?: Schema;
-      removeResponse?: Schema;
-      removeMultiResponse?: Schema;
-      queryParameters?: Schema;
-      sortParameter?: Schema;
-      filterParameter?: Schema;
-      [propName: string]: Schema | undefined;
-    },
-    docs?: ServiceSwaggerOptions,
-    transformSchema?: (schema: Schema) => Record<string, any>,
-  }): ServiceSwaggerOptions;
+type Schema = JSONSchemaDefinition | TAnySchema;
+export function createSwaggerServiceOptions(options: {
+  schemas: {
+    findResponse?: Schema;
+    getResponse?: Schema;
+    createRequest?: Schema;
+    createResponse?: Schema;
+    createMultiRequest?: Schema;
+    createMultiResponse?: Schema;
+    updateRequest?: Schema;
+    updateResponse?: Schema;
+    updateMultiRequest?: Schema;
+    updateMultiResponse?: Schema;
+    patchRequest?: Schema;
+    patchResponse?: Schema;
+    patchMultiRequest?: Schema;
+    patchMultiResponse?: Schema;
+    removeResponse?: Schema;
+    removeMultiResponse?: Schema;
+    queryParameters?: Schema;
+    sortParameter?: Schema;
+    filterParameter?: Schema;
+    [propName: string]: Schema | undefined;
+  };
+  docs?: ServiceSwaggerOptions;
+  transformSchema?: (schema: Schema) => Record<string, any>;
+}): ServiceSwaggerOptions;
 
-  function defaultTransformSchema(schema: Schema): Record<string, any>;
-}
+declare function defaultTransformSchema(schema: Schema): Record<string, any>;
